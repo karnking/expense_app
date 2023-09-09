@@ -1,5 +1,5 @@
 import axios from "axios"
-import { CREATE_TRACKER, GET_USER_SUCCESS, SET_ERROR, SET_LOADING, SET_USER_REQUEST } from "./actionType"
+import { CREATE_TRACKER, DELETE_REQUEST, GET_USER_SUCCESS, SET_ERROR, SET_LOADING, SET_USER_REQUEST, UPDATE_EXPENSE_REQUEST } from "./actionType"
 
 export const verifyUser = (user) => async(dispatch) => {
     dispatch({type:SET_LOADING})
@@ -24,9 +24,39 @@ export const setUser = (payload) => async(dispatch)=>{
 export const setTracker = (user,track) => async(dispatch) =>{
     dispatch({type:SET_LOADING})
     try{
-        const obj = {...user,trackings:[...user.trackings,track]}
+        let obj;
+        if(user.trackings) obj = {...user,trackings:[...user?.trackings,track]}
+        else obj = {...user,trackings:[track]}
         await axios.put(`${process.env.REACT_APP_SERVER_URL}/users/${user.id}`,obj)
         dispatch({type:CREATE_TRACKER,payload:obj})
+    }catch(error){
+        dispatch({type:SET_ERROR})
+    }
+}
+
+export const editTracker = (user,i,ntrack) => async(dispatch) => {
+    dispatch({type:SET_LOADING})
+    try{
+        console.log(user,i,ntrack)
+        const obj = {...user,trackings:user.trackings.map((track,idx)=>{
+            if(idx===i) return ntrack
+            else return track
+        })}
+        await axios.put(`${process.env.REACT_APP_SERVER_URL}/users/${user.id}`,obj)
+        dispatch({type:UPDATE_EXPENSE_REQUEST,payload:obj})
+    }catch(error){
+        dispatch({type:SET_ERROR})
+    }
+}
+
+export const deleteTracker = (user,i) => async(dispatch) => {
+    dispatch({type:SET_LOADING})
+    try{
+        const obj = {...user,trackings:user.trackings.filter((track,idx)=>{
+            return idx!==i
+        })}
+        await axios.put(`${process.env.REACT_APP_SERVER_URL}/users/${user.id}`,obj)
+        dispatch({type:DELETE_REQUEST,payload:obj})
     }catch(error){
         dispatch({type:SET_ERROR})
     }

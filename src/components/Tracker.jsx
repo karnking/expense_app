@@ -46,7 +46,9 @@ const Tracker = () => {
             return;
         }
         dispatch(setTracker(user,obj))
-        showAlert("Created Track!!",'success')
+        .then(()=>{
+            showAlert("Created Track!!",'success')
+        })
     }
     return (
         <Box textAlign='center' h='75vh'>

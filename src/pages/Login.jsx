@@ -25,8 +25,10 @@ const Login = () => {
     const loggedIn = useSelector(store => store.loggedIn) || false
     const loginUser = () =>{
         dispatch(verifyUser(user))
-        if(loggedIn) showAlert("Login successfull!!",'success')
-        else showAlert("Wrong Credentials")
+        .then(()=>{
+            if(loggedIn) showAlert("Login successfull!!",'success')
+            else showAlert("Wrong Credentials")
+        })
     }
     const validation = () => {
         const { email, password } = user
