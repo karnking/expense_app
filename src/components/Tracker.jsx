@@ -45,6 +45,7 @@ const Tracker = () => {
             showAlert('Please Enter date')
             return;
         }
+        console.log(user)
         dispatch(setTracker(user,obj))
         .then(()=>{
             showAlert("Created Track!!",'success')
@@ -69,8 +70,8 @@ const Tracker = () => {
                         <FormLabel w='50%'>Category</FormLabel>
                         <Select size={'xs'} name='to_station' value={obj.to_station} onChange={(e) => setObj({ ...obj, category: e.target.value })}>
                             <option value=''>--select-category--</option>
-                            {obj.type === 'Income' ? income_categories.map(cat => <option value={cat}>{cat}</option>) :
-                                obj.type === 'Expense' ? expense_categories.map(cat => <option value={cat}>{cat}</option>) :
+                            {obj.type === 'Income' ? income_categories.map((cat,id) => <option key={id} value={cat}>{cat}</option>) :
+                                obj.type === 'Expense' ? expense_categories.map((cat,id) => <option key={id} value={cat}>{cat}</option>) :
                                     <option value=''></option>
                             }
                         </Select>

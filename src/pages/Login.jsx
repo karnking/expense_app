@@ -1,7 +1,8 @@
 import { Box, Button, FormControl, FormLabel, HStack, Heading, Input, useToast } from '@chakra-ui/react'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { verifyUser } from '../redux/actions'
+import { GET_USER_ERROR } from '../redux/actionType'
 
 const user_schema = {
     email: '',
@@ -26,6 +27,7 @@ const Login = () => {
     const loginUser = () =>{
         dispatch(verifyUser(user))
         .then(()=>{
+            console.log(loggedIn)
             if(loggedIn) showAlert("Login successfull!!",'success')
             else showAlert("Wrong Credentials")
         })
@@ -42,6 +44,9 @@ const Login = () => {
         }
         loginUser()
     }
+    useEffect(()=>{
+        dispatch({type:GET_USER_ERROR})
+    })
   return (
     <Box textAlign='center'>
             <Heading colorScheme='blue' size={'lg'} p='2'>Login</Heading>
