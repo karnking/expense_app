@@ -7,6 +7,7 @@ const iniState = {
     isError: false
 }
 export const reducer = (state=iniState,{type,payload}) => {
+    console.log(type,payload)
     switch(type){
         case SET_LOADING: return {...state,isLoading:true}
         case SET_ERROR: return {...state,isError:true}

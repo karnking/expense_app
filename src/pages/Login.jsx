@@ -23,7 +23,7 @@ const Login = () => {
             })
         }
     }
-    const loggedIn = useSelector(store => store.loggedIn) || false
+    const loggedIn = useSelector(store => store.loggedIn)
     const loginUser = () =>{
         dispatch(verifyUser(user))
         .then(()=>{
