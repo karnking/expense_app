@@ -10,6 +10,7 @@ export const verifyUser = (user) => async(dispatch) => {
              dispatch({type:GET_USER_SUCCESS,payload:res.data[0]})
         }
         else dispatch({type:GET_USER_ERROR})
+        
     }catch(error){
         dispatch({type:SET_ERROR})
     }

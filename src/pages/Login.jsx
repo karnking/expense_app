@@ -23,14 +23,14 @@ const Login = () => {
             })
         }
     }
+
+    const isError = useSelector(store=> store.isError)
     const loggedIn = useSelector(store => store.loggedIn)
-    const loginUser = () =>{
-        dispatch(verifyUser(user))
-        .then(()=>{
-            console.log(loggedIn)
-            if(loggedIn) showAlert("Login successfull!!",'success')
-            else showAlert("Wrong Credentials")
-        })
+
+    const checkLogin = () =>{
+        console.log(loggedIn,isError)
+        if(loggedIn) showAlert("Login successfull!!",'success')
+        else if(isError) showAlert("Wrong Credentials")
     }
     const validation = () => {
         const { email, password } = user
@@ -42,11 +42,16 @@ const Login = () => {
             showAlert("Password cannot be empty!")
             return
         }
-        loginUser()
+        dispatch(verifyUser(user))
+        console.log(loggedIn)
+        console.log(isError)
     }
     useEffect(()=>{
+        checkLogin()
+    },[loggedIn,isError])
+    useEffect(()=>{
         dispatch({type:GET_USER_ERROR})
-    })
+    },[])
   return (
     <Box textAlign='center'>
             <Heading colorScheme='blue' size={'lg'} p='2'>Login</Heading>

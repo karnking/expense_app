@@ -12,7 +12,7 @@ export const reducer = (state=iniState,{type,payload}) => {
         case SET_LOADING: return {...state,isLoading:true}
         case SET_ERROR: return {...state,isError:true}
         case GET_USER_SUCCESS: return {...state,isLoading:false,loggedIn:true,user:payload}
-        case GET_USER_ERROR: return {...state,isLoading:false,loggedIn:false}
+        case GET_USER_ERROR: return {...state,isLoading:false,loggedIn:false,isError:true}
         case SET_USER_REQUEST : return {...state,isLoading:false}
         case CREATE_TRACKER  : return {...state,isLoading:false,user:payload}
         case DELETE_REQUEST  : return {...state,isLoading:false,user:payload}
