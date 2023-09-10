@@ -1,5 +1,5 @@
 import { CloseIcon, EditIcon } from '@chakra-ui/icons'
-import { Box, Button, Card, CardBody, Flex, FormControl, FormLabel, HStack, Heading, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Select, Text, VStack, useDisclosure, useToast } from '@chakra-ui/react'
+import { Box, Button, Card, CardBody, Flex, FormControl, FormLabel, HStack, Heading, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Select, Spacer, Text, VStack, useDisclosure, useToast } from '@chakra-ui/react'
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { deleteTracker, editTracker } from '../redux/actions'
@@ -12,7 +12,7 @@ const obj_schema = {
 }
 const History = () => {
     const dispatch = useDispatch()
-    const [ido,setIdo] = useState(-1)
+    const [ido, setIdo] = useState(-1)
     const user = useSelector(store => store.user)
     const handleEdit = (track, i) => {
         onOpen()
@@ -57,21 +57,43 @@ const History = () => {
         }
         onClose()
         dispatch(editTracker(user, ido, obj))
-        .then(()=>{
-            showAlert("Edit successfull",'success')
-        })
+            .then(() => {
+                showAlert("Edit successfull", 'success')
+            })
     }
+    const [typeby,setTypeby] = useState('')
+    const [sortby,setSortby] = useState('') 
+    const trackings = user?.trackings?.filter(track=>typeby==='' ? true : track.type===typeby).sort((a,b)=>{
+        if(sortby==='asc') 
+            return new Date(a.date)-(new Date(b.date)) 
+        else if(sortby==='desc')
+            return new Date(b.date)-(new Date(a.date)) 
+        return false
+    }) || []
     const { isOpen, onOpen, onClose } = useDisclosure()
     return <Box minH='75vh' textAlign={'center'}>
         <Heading>History of Expenses & Tracking</Heading>
-        {user?.trackings?.map((track, i) => {
+        <Flex w='60%' margin={'auto'} my='5'>
+            <Select size={'sm'} w='40%' border={'1px solid black'} value={typeby} onChange={(e)=>setTypeby(e.target.value)}>
+                <option value={''}>--Select-Type--</option>
+                <option value={'Income'}>Income</option>
+                <option value={'Expense'}>Expense</option>
+            </Select>
+            <Spacer />
+            <Select size={'sm'} w='40%' border={'1px solid black'} value={sortby} onChange={(e)=>setSortby(e.target.value)}>
+                <option value={''}>--Sort--</option>
+                <option value={'asc'}>Ascending</option>
+                <option value={'desc'}>Descending</option>
+            </Select>
+        </Flex>
+        {trackings.map((track, i) => {
             const { type, category, amount, date } = track
             return <Card w='50%' margin={'auto'} mt='2' key={i}>
                 <CardBody>
                     <Flex justify={'space-between'} px='5'>
                         <VStack textAlign={'left'}>
                             <Heading fontSize={'18'}>{category}</Heading>
-                            <Text textAlign={'left'} fontSize={'13'}>{new Date(date).toLocaleDateString(undefined, { weekday: 'short', day: 'numeric', month: 'short' })}</Text>
+                            <Text textAlign={'left'} fontSize={'13'}>{new Date(date).toLocaleDateString(undefined, { weekday: 'short', day: 'numeric', month: 'short', year:'numeric' })}</Text>
                             <Text textAlign={'left'} fontSize={'13'}>{type.toUpperCase()}</Text>
                         </VStack>
                         <VStack>
@@ -112,8 +134,8 @@ const History = () => {
                                 <FormLabel w='50%'>Category</FormLabel>
                                 <Select size={'xs'} name='category' value={obj.category} onChange={(e) => setObj({ ...obj, category: e.target.value })}>
                                     <option value=''>--select-category--</option>
-                                    {obj.type === 'Income' ? income_categories.map((cat,i) => <option key={i} value={cat}>{cat}</option>) :
-                                        obj.type === 'Expense' ? expense_categories.map((cat,i) => <option key={i} value={cat}>{cat}</option>) :
+                                    {obj.type === 'Income' ? income_categories.map((cat, i) => <option key={i} value={cat}>{cat}</option>) :
+                                        obj.type === 'Expense' ? expense_categories.map((cat, i) => <option key={i} value={cat}>{cat}</option>) :
                                             <option value=''></option>
                                     }
                                 </Select>

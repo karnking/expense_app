@@ -12,7 +12,7 @@ const Dashboard = () => {
     const [tabIndex, setTabIndex] = useState(0)
     const bg = colors[tabIndex]
     return <>
-        <Tabs isFitted variant='enclosed' onChange={(index) => setTabIndex(index)} bg={bg}>
+        <Tabs isFitted variant='enclosed-colored' onChange={(index) => setTabIndex(index)} bg={bg}>
             <TabList mb='1em'>
                 <Tab>Tracker</Tab>
                 <Tab>Analytics</Tab>
